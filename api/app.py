@@ -45,3 +45,18 @@ sunset_api_data = sunset_api_response.json()
 current_date = datetime.date.today()
 sunset_time = datetime.datetime.strptime(sunset_api_data['results']['sunset'], '%I:%M:%S %p').time()
 
+
+@app.put("/api/state")
+async def toggle(request: Request): 
+  state = await request.json()
+
+  lights_obj = await states.find_one({"tobe":"updated"})
+  if lights_obj:
+    await states.update_one({"tobe":"updated"}, {"$set": state})
+
+  else:
+    await states.insert_one({**state, "tobe": "updated"})
+  
+  new_ligts_obj = await states.find_one({"tobe":"updated"}) 
+
+  return new_ligts_obj
