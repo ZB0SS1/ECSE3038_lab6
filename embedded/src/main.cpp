@@ -4,11 +4,17 @@
 #include <ArduinoJson.h>
 #include "env.h" 
 
-#define endpoint "https://rg-lab6-api.onrender.com"
+#define endpoint "rg-lab6-api.onrender.com"
 
 #define fanPin 22
 #define lightPin 23
 
+
+
+float getTemp(){
+
+  return random(21.1,33.1);
+}
 
 void setup() {
 
@@ -74,7 +80,7 @@ void loop() {
       Serial.println(httpResponseCode);
     }
 
-    int httpResponseCode = http.GET();
+    httpResponseCode = http.GET();
 
     Serial.println("");
     Serial.println("");
@@ -121,12 +127,6 @@ void loop() {
 }
 
 
-
-
-float getTemp(){
-
-  return random(21.1,33.1);
-}
 
 
 
