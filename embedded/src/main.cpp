@@ -6,8 +6,8 @@
 
 #define endpoint "https://rg-lab6-api.onrender.com"
 
-#define fanPin 2
-#define lightPin 4
+#define fanPin 22
+#define lightPin 23
 
 
 void setup() {
