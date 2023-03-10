@@ -12,7 +12,7 @@ import requests
 app = FastAPI()
 
 origins = [
-    "https://ecse-three-led.netlify.app",
+    "https://rg-lab6-api.onrender.com",
 ]
 
 app.add_middleware(
