@@ -81,6 +81,8 @@ void loop() {
       Serial.println(httpResponseCode);
     }
 
+    http.end();    
+    http.begin(url);
     httpResponseCode = http.GET();
 
     Serial.println("");
