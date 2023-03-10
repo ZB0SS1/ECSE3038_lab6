@@ -40,7 +40,8 @@ void setup() {
 void loop() {
   //Check WiFi connection status
   if(WiFi.status()== WL_CONNECTED){
-
+    Serial.println("");
+    Serial.println("");
     HTTPClient http;
   
     // Establish a connection to the server
@@ -48,7 +49,7 @@ void loop() {
     http.begin(url);
  
     // Specify content-type header
-    http.addHeader("Content-Type", "application/json");
+    //http.addHeader("Content-Type", "application/json");
 
     StaticJsonDocument<1024> docput;
     String httpRequestData;
@@ -109,14 +110,10 @@ void loop() {
     }
     
     bool temp = docget["temperature"]; 
-    bool light= docget["time"]; 
+    bool light= docget["sunset"]; 
 
-    if(temp >= 28.0){
-      digitalWrite(fanPin,HIGH);
-    } else {
-      digitalWrite(fanPin,LOW);
-    }
-  
+    digitalWrite(fanPin,temp);
+    digitalWrite(lightPin,temp);
     
     // Free resources
     http.end();
