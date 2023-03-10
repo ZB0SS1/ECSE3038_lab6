@@ -60,3 +60,12 @@ async def toggle(request: Request):
   new_ligts_obj = await states.find_one({"tobe":"updated"}) 
 
   return new_ligts_obj
+
+
+
+@app.get("/api/state")
+async def get_state():
+  state = await states.find_one({"tobe": "updated"})
+  if state == None:
+    return {"temperature": 21.0, "sunset": sunset_time}
+  return state
