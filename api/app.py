@@ -1,13 +1,14 @@
-import os
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request
 import motor.motor_asyncio
 import pydantic
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
 from geopy.geocoders import Nominatim
-import datetime
-import requests
+import  datetime 
+from datetime import timedelta
+import time
 
+import requests
 
 app = FastAPI()
 
@@ -41,12 +42,15 @@ sunset_api_endpoint = f'https://api.sunrise-sunset.org/json?lat={user_latitude}&
 
 sunset_api_response = requests.get(sunset_api_endpoint)
 sunset_api_data = sunset_api_response.json()
+now_time = datetime.datetime.now().time()
 
-current_date = datetime.date.today()
 sunset_time = datetime.datetime.strptime(sunset_api_data['results']['sunset'], '%I:%M:%S %p').time()
+utc_time = datetime.time(5, 0, 0)
 
-now_time = str(datetime.datetime.now())
-
+date = datetime.date(1, 1, 1)
+datetime1 = datetime.datetime.combine(date, sunset_time)
+datetime2 = datetime.datetime.combine(date, utc_time)
+final_sunset_time = str(datetime1 - datetime2)
 
 @app.get("/")
 async def home():
@@ -56,17 +60,16 @@ async def home():
 @app.put("/api/state")
 async def toggle(request: Request): 
   state = await request.json()
-
+  state["sunset"] = final_sunset_time
+  state["now"] = str(now_time)
+  state["Time Later than Sunset"] = (now_time>sunset_time)
   obj = await states.find_one({"tobe":"updated"})
-  obj["sunset"] = sunset_time
+  
   if obj:
     await states.update_one({"tobe":"updated"}, {"$set": state})
-
   else:
     await states.insert_one({**state, "tobe": "updated"})
-  
   new_obj = await states.find_one({"tobe":"updated"}) 
-
   return new_obj
 
 
