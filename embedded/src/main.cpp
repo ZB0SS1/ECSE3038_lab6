@@ -111,8 +111,8 @@ void loop() {
       return;
     }
     
-    bool temp = docget["temperature"]; 
-    bool light= docget["sunset"]; 
+    bool temp = docget["temp"]; 
+    bool light= docget["set"]; 
 
     digitalWrite(fanPin,temp);
     digitalWrite(lightPin,temp);
