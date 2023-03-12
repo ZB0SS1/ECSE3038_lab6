@@ -75,8 +75,6 @@ async def home():
 async def toggle(request: Request): 
   state = await request.json()
   #final_sunset_time = str(get_sunset())
-  state["sunset"] = str(sunset_time)
-  state["now"] = str(now_time)
   state["light"] = (datetime1<datetime2)
   state["fan"] = (float(state["temperature"]) >= 28.0) 
 
@@ -87,7 +85,7 @@ async def toggle(request: Request):
   else:
     await states.insert_one({**state, "tobe": "updated"})
   new_obj = await states.find_one({"tobe":"updated"}) 
-  return new_obj
+  return new_obj,204
 
 
 
@@ -97,9 +95,7 @@ async def get_state():
   
   state["fan"] = (float(state["temperature"]) >= 28.0) 
   state["light"] = (datetime1<datetime2)
-  state["sunset"] = str(sunset_time)
-  state["now"] = str(now_time)
-  
+
   if state == None:
     return {"fan": False, "light": False}
   return state
