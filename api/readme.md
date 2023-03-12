@@ -1,4 +1,5 @@
 # Lab 6
+## api link     "https://rg-lab6-api.onrender.com",
 
 For this lab, students will be implementing part of an end-to-end platform to be used to control the state of electronic devices connected to the ESP32 module.
 
