@@ -7,6 +7,7 @@ from geopy.geocoders import Nominatim
 import  datetime 
 from datetime import timedelta
 import time
+import pytz
 
 import requests
 
@@ -59,7 +60,7 @@ sunset_api_response = requests.get(sunset_api_endpoint)
 sunset_api_data = sunset_api_response.json()
 
 sunset_time = datetime.datetime.strptime(sunset_api_data['sunset'], '%Y-%m-%dT%H:%M:%S.%f').time()
-now_time = datetime.datetime.now().time()
+now_time = datetime.datetime.now(pytz.timezone('Jamaica')).time()
 
 
 datetime1 = datetime.datetime.strptime(str(sunset_time),"%H:%M:%S")
