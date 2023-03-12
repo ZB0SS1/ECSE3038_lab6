@@ -38,20 +38,32 @@ location = geolocator.geocode("Hyderabad")
 user_latitude =  location.latitude
 user_longitude = location.longitude
 
-def get_sunset():
-  sunset_api_endpoint = f'https://api.sunrise-sunset.org/json?lat={user_latitude}&lng={user_longitude}'
+# def get_sunset():
+#   sunset_api_endpoint = f'https://api.sunrise-sunset.org/json?lat={user_latitude}&lng={user_longitude}'
 
-  sunset_api_response = requests.get(sunset_api_endpoint)
-  sunset_api_data = sunset_api_response.json()
+#   sunset_api_response = requests.get(sunset_api_endpoint)
+#   sunset_api_data = sunset_api_response.json()
 
-  sunset_time = datetime.datetime.strptime(sunset_api_data['results']['sunset'], '%H:%M:%S %p').time()
-  print(sunset_api_endpoint)
-  utc_time = datetime.time(5, 0, 0)
+#   sunset_time = datetime.datetime.strptime(sunset_api_data['results']['sunset'], '%H:%M:%S %p').time()
+#   utc_time = datetime.time(5, 0, 0)
 
-  date = datetime.date(1, 1, 1)
-  datetime1 = datetime.datetime.combine(date, sunset_time)
-  datetime2 = datetime.datetime.combine(date, utc_time)
-  return  datetime1 - datetime2
+#   date = datetime.date(1, 1, 1)
+#   datetime1 = datetime.datetime.combine(date, sunset_time)
+#   datetime2 = datetime.datetime.combine(date, utc_time)
+#   return  datetime1 - datetime2
+
+
+sunset_api_endpoint = f'https://ecse-sunset-api.onrender.com/api/sunset'
+
+sunset_api_response = requests.get(sunset_api_endpoint)
+sunset_api_data = sunset_api_response.json()
+
+sunset_time = datetime.datetime.strptime(sunset_api_data['sunset'], '%Y-%m-%dT%H:%M:%S.%f').time()
+now_time = datetime.datetime.now().time()
+
+
+datetime1 = datetime.datetime.strptime(str(sunset_time),"%H:%M:%S")
+datetime2 = datetime.datetime.strptime(str(now_time),"%H:%M:%S.%f")
 
 @app.get("/")
 async def home():
@@ -61,10 +73,10 @@ async def home():
 @app.put("/api/state")
 async def toggle(request: Request): 
   state = await request.json()
-  final_sunset_time = str(get_sunset())
-  state["sunset"] = final_sunset_time
-  state["now"] = str(datetime.datetime.now().time())
-  state["set"] = (state["now"]>state["sunset"])
+  #final_sunset_time = str(get_sunset())
+  state["sunset"] = str(sunset_time)
+  state["now"] = str(now_time)
+  state["set"] = (datetime1<datetime2)
   obj = await states.find_one({"tobe":"updated"})
   
   if obj:
@@ -81,8 +93,9 @@ async def get_state():
   state = await states.find_one({"tobe": "updated"})
   
   state["temp"] = (float(state["temperature"]) >= 28.0) 
-  state["set"] = (state["now"]>state["sunset"])
-
+  state["set"] = (datetime1<datetime2)
+  state["sunset"] = str(sunset_time)
+  state["now"] = str(now_time)
   
   if state == None:
     return {"temp": False, "set": False}
