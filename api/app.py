@@ -101,5 +101,5 @@ async def get_state():
   state["now"] = str(now_time)
   
   if state == None:
-    return {"temp": False, "set": False}
+    return {"fan": False, "light": False}
   return state
