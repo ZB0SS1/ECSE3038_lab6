@@ -76,7 +76,9 @@ async def toggle(request: Request):
   #final_sunset_time = str(get_sunset())
   state["sunset"] = str(sunset_time)
   state["now"] = str(now_time)
-  state["set"] = (datetime1<datetime2)
+  state["light"] = (datetime1<datetime2)
+  state["fan"] = (float(state["temperature"]) >= 28.0) 
+
   obj = await states.find_one({"tobe":"updated"})
   
   if obj:
@@ -92,8 +94,8 @@ async def toggle(request: Request):
 async def get_state():
   state = await states.find_one({"tobe": "updated"})
   
-  state["temp"] = (float(state["temperature"]) >= 28.0) 
-  state["set"] = (datetime1<datetime2)
+  state["fan"] = (float(state["temperature"]) >= 28.0) 
+  state["light"] = (datetime1<datetime2)
   state["sunset"] = str(sunset_time)
   state["now"] = str(now_time)
   
