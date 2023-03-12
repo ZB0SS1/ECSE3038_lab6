@@ -47,7 +47,11 @@ void loop() {
     // Establish a connection to the server
     String url = "https://" + String(endpoint) + "/api/state";
     http.begin(url);
- 
+    http.addHeader("Content-type", "application/json");
+    http.addHeader("Content-length", "23");
+
+
+
     // Specify content-type header
     //http.addHeader("Content-Type", "application/json");
 
