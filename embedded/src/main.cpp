@@ -48,7 +48,6 @@ void loop() {
     String url = "https://" + String(endpoint) + "/api/temperature";
     http.begin(url);
     http.addHeader("Content-type", "application/json");
-    http.addHeader("Content-length", "23");
 
 
 
@@ -86,6 +85,8 @@ void loop() {
     }
 
     http.end();
+
+
     url = "https://" + String(endpoint) + "/api/state";    
     http.begin(url);
     httpResponseCode = http.GET();
