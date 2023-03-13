@@ -71,7 +71,7 @@ async def home():
     return {"LAB 6": "redirect to /api/state"}
 
 
-@app.put("/api/state")
+@app.put("/api/temperature")
 async def toggle(request: Request): 
   state = await request.json()
   #final_sunset_time = str(get_sunset())
