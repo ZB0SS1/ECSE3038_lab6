@@ -45,7 +45,7 @@ void loop() {
     HTTPClient http;
   
     // Establish a connection to the server
-    String url = "https://" + String(endpoint) + "/api/state";
+    String url = "https://" + String(endpoint) + "/api/temperature";
     http.begin(url);
     http.addHeader("Content-type", "application/json");
     http.addHeader("Content-length", "23");
@@ -85,7 +85,8 @@ void loop() {
       Serial.println(httpResponseCode);
     }
 
-    http.end();    
+    http.end();
+    url = "https://" + String(endpoint) + "/api/state";    
     http.begin(url);
     httpResponseCode = http.GET();
 
